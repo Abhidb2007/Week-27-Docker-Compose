@@ -1,29 +1,28 @@
-import express from "express";
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from "@prisma/client"
+import express from "express"
 
-const app = express();
-const prisma = new PrismaClient();
-
-app.use(express.json());
+const app = express()
+const prismaClient = new PrismaClient();
 
 app.get("/", async (req, res) => {
-  const data = await prisma.user.findMany();
-  res.json({ data });
-});
+   
+    const data = await prismaClient.user.findMany();
+    res.json({
+        data
+    })
+})
 
 app.post("/", async (req, res) => {
-  await prisma.user.create({
-    data: {
-      username: Math.random().toString(),
-      password: Math.random().toString(),
-    },
-  });
 
-  res.json({
-    message: "post endpoint",
-  });
-});
+    await prismaClient.user.create({
+        data: {
+            username: Math.random().toString(),
+            password: Math.random().toString()
+        }
+    })
+    res.json({
+        "message": "post endpoint"
+    })
+})
 
-app.listen(3000, () => {
-  console.log("Server running on http://localhost:3000");
-});
+app.listen(3000);
