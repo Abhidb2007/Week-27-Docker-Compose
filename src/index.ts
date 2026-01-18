@@ -1,13 +1,29 @@
 import express from "express";
-const app=express();
-app.get("/",(req,res)=>{
-    res.send({
-        "message":"hello world"
-    });
+import { PrismaClient } from "@prisma/client";
+
+const app = express();
+const prisma = new PrismaClient();
+
+app.use(express.json());
+
+app.get("/", async (req, res) => {
+  const data = await prisma.user.findMany();
+  res.json({ data });
 });
-app.post("/",(req, res)=>{
-    res.send({
-        "message":"post end point"
-    })
-})
-app.listen(3000);
+
+app.post("/", async (req, res) => {
+  await prisma.user.create({
+    data: {
+      username: Math.random().toString(),
+      password: Math.random().toString(),
+    },
+  });
+
+  res.json({
+    message: "post endpoint",
+  });
+});
+
+app.listen(3000, () => {
+  console.log("Server running on http://localhost:3000");
+});
